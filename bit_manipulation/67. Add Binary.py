@@ -5,68 +5,28 @@ class Solution:
 
     @staticmethod
     def addBinaryCarryOn(a: str, b: str) -> str:
-        # Execution:
-        # 1. Add leading zeroes to make both strings of equal length
+        # Pad both strings to the same length
+        a, b = a.zfill(max(len(a), len(b))), b.zfill(max(len(a), len(b)))
 
-        if len(a) > len(b):
-            b = '0' * (len(a) - len(b)) + b
+        carry = 0
+        result = []
 
-        if len(a) < len(b):
-            a = '0' * (len(b) - len(a)) + a
-
-        carry = '0'
-        result = ''
-
+        # Traverse both strings from the rightmost bit to the leftmost
         for i in range(len(a) - 1, -1, -1):
-            # Loop over the strings from rightmost character to leftmost character
+            # Convert characters to integers and calculate sum + carry
+            bit_a, bit_b = int(a[i]), int(b[i])
+            total = bit_a + bit_b + carry
 
-            if a[i] == '1' and b[i] == '1':
-                # If both bits from 'a' and 'b' are '1':
-                if carry == '1':
-                    # If there's a carry ('carry' == '1'), add '1' to the result (because 1+1+1 = 11 in binary),
-                    # and keep the carry as '1'.
-                    result = '1' + result
-                else:
-                    # If there's no carry ('carry' == '0'), add '0' to the result (because 1+1 = 10 in binary),
-                    # and set the carry to '1'.
-                    result = '0' + result
-                carry = '1'  # Update carry to '1'.
+            # Compute the new bit (total % 2) and the carry (total // 2)
+            result.append(str(total % 2))
+            carry = total // 2
 
-            elif a[i] == '1' or b[i] == '1':
-                # If exactly one of the bits is '1' (the other is '0'):
-                if carry == '1':
-                    # If there's a carry ('carry' == '1'), add '0' to the result (1+0+1 = 10 or 0+1+1 = 10),
-                    # and keep the carry as '1'.
-                    result = '0' + result
-                    carry = '1'  # Carry remains '1'.
-                else:
-                    # If there's no carry, add '1' to the result (1+0 = 1 or 0+1 = 1),
-                    # and set the carry to '0'.
-                    result = '1' + result
-                    carry = '0'  # Carry is reset to '0'.
+        # If there's a carry left after the loop, prepend it
+        if carry:
+            result.append('1')
 
-            else:
-                # If both bits from 'a' and 'b' are '0':
-                if carry == '1':
-                    # If there's a carry ('carry' == '1'), add '1' to the result (0+0+1 = 1),
-                    # and reset the carry to '0'.
-                    result = '1' + result
-                else:
-                    # If there's no carry, add '0' to the result (0+0 = 0),
-                    # and the carry remains '0'.
-                    result = '0' + result
-                carry = '0'  # Reset carry to '0'.
-
-            i += 1
-            # Increment 'i' at the end of the loop (though this has no functional effect
-            # because the loop itself controls 'i').
-
-        if carry == '1':
-            # After processing all bits, if there's still a carry left ('carry' == '1'),
-            # prepend '1' to the result.
-            result = '1' + result
-
-        return result
+        # Reverse the result and join it into a string
+        return ''.join(reversed(result))
 
 
 if __name__ == '__main__':
