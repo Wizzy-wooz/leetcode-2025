@@ -1,8 +1,10 @@
 class Solution:
-    def addBinary(self, a: str, b: str) -> str:
+    @staticmethod
+    def addBinary(a: str, b: str) -> str:
         return bin(int(a, 2) + int(b, 2))[2:]
 
-    def addBinary(self, a: str, b: str) -> str:
+    @staticmethod
+    def addBinaryCarryOn(a: str, b: str) -> str:
         # Define a function to add two binary strings 'a' and 'b', returning their binary sum as a string.
 
         if len(a) > len(b):
@@ -77,5 +79,4 @@ class Solution:
 
 
 if __name__ == '__main__':
-    solution = Solution()
-    print(solution.addBinary("0010", "0111"))
+    print(Solution.addBinary("0010", "0111"))
